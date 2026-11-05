@@ -118,13 +118,27 @@ function hydrate(profile) {
   setText('[data-bind="students.heading"]', profile.students.heading);
   setText('[data-bind="students.intro"]', profile.students.intro);
   const studentsEl = document.querySelector('[data-bind="students.items"]');
-  if (studentsEl) studentsEl.innerHTML = profile.students.items.map(s => `
-    <div class="student">
-      <div class="student__name">${escapeHtml(s.name)}</div>
-      <div class="student__year">Ph.D. student since ${escapeHtml(s.year)}</div>
-      ${s.url ? `<a class="student__link" href="${escapeHtml(s.url)}" target="_blank" rel="noopener" aria-label="${escapeHtml(s.name)} — personal homepage">Homepage ↗</a>` : ''}
-    </div>
-  `).join('');
+  if (studentsEl) {
+    const st = profile.students;
+    const card = (s, current) => `
+      <div class="student">
+        <div class="student__name">${escapeHtml(s.name)}</div>
+        <div class="student__year">${current ? 'Ph.D. student since' : 'Joined'} ${escapeHtml(s.year)}</div>
+        ${s.url ? `<a class="student__link" href="${escapeHtml(s.url)}" target="_blank" rel="noopener" aria-label="${escapeHtml(s.name)} — personal homepage">Homepage ↗</a>` : ''}
+      </div>
+    `;
+    const current = st.items.filter(s => s.status !== 'alumni');
+    const alumni  = st.items.filter(s => s.status === 'alumni');
+    const group = (label, list, isCurrent) => list.length ? `
+      <div class="student-group">
+        <div class="col-head">${escapeHtml(label)}</div>
+        <div class="student-list">${list.map(s => card(s, isCurrent)).join('')}</div>
+      </div>
+    ` : '';
+    studentsEl.innerHTML =
+      group(st.current_label || 'Current Students', current, true) +
+      group(st.alumni_label || 'Former Students', alumni, false);
+  }
 }
 
 // Split groups into two balanced columns (by item count) so the two-col grid

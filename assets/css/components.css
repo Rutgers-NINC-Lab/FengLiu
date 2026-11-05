@@ -464,12 +464,12 @@
 /* =========================================================
    Students
 ========================================================= */
+.student-groups { max-width: 820px; }
+.student-group + .student-group { margin-top: 2rem; }
 .student-list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0 3rem;
-  border-top: 1px solid var(--rule);
-  max-width: 820px;
 }
 @media (min-width: 640px) { .student-list { grid-template-columns: 1fr 1fr; } }
 .student {
