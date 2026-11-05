@@ -127,8 +127,8 @@ function hydrate(profile) {
         ${s.url ? `<a class="student__link" href="${escapeHtml(s.url)}" target="_blank" rel="noopener" aria-label="${escapeHtml(s.name)} — personal homepage">Homepage ↗</a>` : ''}
       </div>
     `;
-    const current = st.items.filter(s => s.status !== 'alumni');
-    const alumni  = st.items.filter(s => s.status === 'alumni');
+    const current = st.items.filter(s => s.status !== 'past');
+    const past    = st.items.filter(s => s.status === 'past');
     const group = (label, list, isCurrent) => list.length ? `
       <div class="student-group">
         <div class="col-head">${escapeHtml(label)}</div>
@@ -137,7 +137,7 @@ function hydrate(profile) {
     ` : '';
     studentsEl.innerHTML =
       group(st.current_label || 'Current Students', current, true) +
-      group(st.alumni_label || 'Former Students', alumni, false);
+      group(st.past_label || 'Former Students', past, false);
   }
 }
 
